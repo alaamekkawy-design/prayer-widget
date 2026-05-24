@@ -12,19 +12,24 @@
     background: #e8e8e8;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     font-family: 'Cairo', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
   }
 
   .widget {
     background: #ffffff;
-    width: 340px;
+    width: 100%;
+    max-width: 380px;
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     overflow: hidden;
     border: 1px solid #ddd;
-    padding: 16px 16px 12px;
+    padding: 12px 8px 10px;
+    box-sizing: border-box;
   }
 
   /* Day name header */
@@ -134,28 +139,42 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 6px;
-    font-size: 11.5px;
+    font-size: 9px;
     direction: rtl;
+    table-layout: fixed;
   }
 
   .prayer-table th, .prayer-table td {
-    padding: 3px 5px;
+    padding: 3px 1px;
     text-align: center;
     border: 0.5px solid #c5cfe0;
     color: #1a3a6b;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
+  .prayer-table th:first-child,
+  .prayer-table td:first-child {
+    width: 18%;
+  }
+
+  .prayer-table th:not(:first-child),
+  .prayer-table td:not(:first-child) {
+    width: 13.6%;
   }
 
   .prayer-table th {
     background: #f0f4fa;
     font-weight: 700;
-    font-size: 11px;
+    font-size: 9px;
   }
 
   .prayer-table td:first-child {
     font-weight: 700;
     background: #f8f9fc;
-    text-align: right;
-    padding-right: 8px;
+    text-align: center;
+    padding: 3px 1px;
   }
 
   .prayer-table tr:nth-child(even) td {
