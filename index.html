@@ -27,11 +27,11 @@
   .widget {
     background: #ffffff;
     width: 100vw;
-    min-height: auto ;
+    height: auto;
     border-radius: 0;
     box-shadow: none;
     border: none;
-    padding: 12px 8px 10px;
+    padding: 3vw 3vw 3vw;
     box-sizing: border-box;
   }
 
@@ -153,14 +153,9 @@
     white-space: nowrap;
   }
 
-  .prayer-table th:first-child,
-  .prayer-table td:first-child {
-    width: 18%;
-  }
-
-  .prayer-table th:not(:first-child),
-  .prayer-table td:not(:first-child) {
-    width: 13.6%;
+  .prayer-table th,
+  .prayer-table td {
+    width: 16.6%;
   }
 
   .prayer-table th {
@@ -169,18 +164,59 @@
     font-size: 2.6vw;
   }
 
-  .prayer-table td:first-child {
-    font-weight: 700;
-    background: #f8f9fc;
-    text-align: center;
-  }
-
   .prayer-table tr:nth-child(even) td {
     background: #f5f7fb;
   }
 
-  .prayer-table tr:nth-child(even) td:first-child {
-    background: #eef1f7;
+  /* Next prayer */
+  .next-prayer-box {
+    background: #1a3a6b;
+    border-radius: 8px;
+    margin-top: 2vw;
+    padding: 2vw 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    direction: rtl;
+  }
+
+  .next-prayer-label {
+    color: #a8c0e8;
+    font-size: 2.5vw;
+    font-weight: 600;
+  }
+
+  .next-prayer-name {
+    color: #ffffff;
+    font-family: 'Amiri', serif;
+    font-size: 5vw;
+    font-weight: 700;
+    margin-top: 0.5vw;
+  }
+
+  .next-prayer-time {
+    color: #f0c040;
+    font-size: 3vw;
+    font-weight: 600;
+    margin-top: 0.3vw;
+  }
+
+  .countdown-box {
+    text-align: center;
+  }
+
+  .countdown-label {
+    color: #a8c0e8;
+    font-size: 2.5vw;
+  }
+
+  .countdown-timer {
+    color: #ffffff;
+    font-size: 6vw;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    letter-spacing: 1px;
+    margin-top: 0.5vw;
   }
 
   /* Footer */
@@ -258,7 +294,6 @@
   <table class="prayer-table">
     <thead>
       <tr>
-        <th>المواقيت</th>
         <th>فجر</th>
         <th>شروق</th>
         <th>ظهر</th>
@@ -269,6 +304,19 @@
     </thead>
     <tbody id="prayerBody"></tbody>
   </table>
+
+  <!-- Next Prayer Countdown -->
+  <div class="next-prayer-box">
+    <div>
+      <div class="next-prayer-label">الصلاة القادمة</div>
+      <div class="next-prayer-name" id="nextPrayerName">-</div>
+      <div class="next-prayer-time" id="nextPrayerTime">-</div>
+    </div>
+    <div class="countdown-box">
+      <div class="countdown-label">الوقت المتبقي</div>
+      <div class="countdown-timer" id="countdownTimer">--:--:--</div>
+    </div>
+  </div>
 
   <!-- Footer greeting -->
   <div class="footer">Mekkawy</div>
@@ -397,6 +445,12 @@ function calcPrayer(date, lat, lng) {
   const asrH     = asrHourAngle();
   const ishaH    = hourAngle(-17.5);
 
+  // raw: actual minutes from midnight (0-1440)
+  function rawMins(h) {
+    if (h === null || isNaN(h)) return null;
+    return ((h % 24) + 24) % 24 * 60;
+  }
+
   return {
     fajr:    fajrH    !== null ? fmt(transit - fajrH)    : '--:--',
     sunrise: sunriseH !== null ? fmt(transit - sunriseH) : '--:--',
@@ -404,6 +458,13 @@ function calcPrayer(date, lat, lng) {
     asr:     asrH     !== null ? fmt(transit + asrH)     : '--:--',
     maghrib: sunriseH !== null ? fmt(transit + sunriseH) : '--:--',
     isha:    ishaH    !== null ? fmt(transit + ishaH)    : '--:--',
+    // raw minutes for countdown
+    fajrMins:    fajrH    !== null ? rawMins(transit - fajrH)    : null,
+    sunriseMins: sunriseH !== null ? rawMins(transit - sunriseH) : null,
+    dhuhrMins:   rawMins(transit),
+    asrMins:     asrH     !== null ? rawMins(transit + asrH)     : null,
+    maghribMins: sunriseH !== null ? rawMins(transit + sunriseH) : null,
+    ishaMins:    ishaH    !== null ? rawMins(transit + ishaH)    : null,
   };
 }
 
@@ -436,23 +497,20 @@ function render() {
     toAr(cop.day > 0 && cop.day < 32 ? cop.day : now.getDate()) + ' ' +
     (COPTIC_MONTHS[cop.month % 13] || 'توت') + ' ' + toAr(cop.year > 0 ? cop.year : 1742);
 
-  // Prayer times - all cities (sync calculation)
+  // Prayer times - selected city only
+  const city = CITIES[currentCity];
+  const pt = calcPrayer(now, city.lat, city.lng);
   const tbody = document.getElementById('prayerBody');
-  tbody.innerHTML = '';
-  CITIES.forEach((city) => {
-    const pt = calcPrayer(now, city.lat, city.lng);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${city.name}</td>
+  tbody.innerHTML = `
+    <tr>
       <td>${pt.fajr}</td>
       <td>${pt.sunrise}</td>
       <td>${pt.dhuhr}</td>
       <td>${pt.asr}</td>
       <td>${pt.maghrib}</td>
       <td>${pt.isha}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+    </tr>
+  `;
 }
 
 // Location buttons
@@ -465,13 +523,67 @@ CITIES.forEach((c, i) => {
     document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentCity = i;
+    render();
+    updateNextPrayer();
   };
   bar.appendChild(btn);
 });
 
-// Initial render + auto-update every minute
+// ---- Next Prayer Countdown ----
+const PRAYER_NAMES_AR = {
+  fajr: 'الفجر', sunrise: 'الشروق', dhuhr: 'الظهر',
+  asr: 'العصر', maghrib: 'المغرب', isha: 'العشاء'
+};
+const PRAYER_ORDER = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+
+function timeStrToMinutes(t) {
+  // t is like "04:15" or "12:52"
+  if (!t || t === '--:--') return null;
+  // strip any suffix
+  const clean = t.replace(/[^0-9:]/g,'').trim();
+  const parts = clean.split(':');
+  return parseInt(parts[0])*60 + parseInt(parts[1]);
+}
+
+function updateNextPrayer() {
+  const now = new Date();
+  const currentMins = now.getHours()*60 + now.getMinutes();
+
+  // Get prayer times for selected city
+  const pt = calcPrayer(now, CITIES[currentCity].lat, CITIES[currentCity].lng);
+
+  const prayers = PRAYER_ORDER.map(key => ({
+    key,
+    name: PRAYER_NAMES_AR[key],
+    time: pt[key],
+    mins: pt[key + 'Mins']
+  })).filter(p => p.mins !== null);
+
+  // Find next prayer
+  let next = prayers.find(p => p.mins > currentMins);
+  if (!next) next = prayers[0]; // wrap to tomorrow's fajr
+
+  // Calculate remaining time
+  let diffMins = next.mins - currentMins;
+  if (diffMins < 0) diffMins += 24*60;
+
+  const hrs  = Math.floor(diffMins / 60);
+  const mins = Math.floor(diffMins % 60);
+  const secs = 59 - now.getSeconds();
+
+  const pad = n => String(n).padStart(2,'0');
+  const countdown = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+
+  document.getElementById('nextPrayerName').textContent  = next.name;
+  document.getElementById('nextPrayerTime').textContent  = next.time;
+  document.getElementById('countdownTimer').textContent  = countdown;
+}
+
+// Initial render + auto-update
 render();
+updateNextPrayer();
 setInterval(render, 60000);
+setInterval(updateNextPrayer, 1000);
 </script>
 </body>
 </html>
