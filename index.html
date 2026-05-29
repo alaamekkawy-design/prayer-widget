@@ -173,7 +173,16 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
     </tbody>
   </table>
 
-  <!-- Next prayer / countdown (today only) -->
+  
+
+  <!-- Day navigation -->
+  <div class="day-nav">
+    <button class="nav-btn" onclick="changeDay(-1)">◀ اليوم السابق</button>
+    <button class="nav-btn today-indicator" id="todayBtn" onclick="goToday()">اليوم</button>
+    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ▶</button>
+  </div>
+
+<!-- Next prayer / countdown (today only) -->
   <div id="nextPrayerSection">
     <div class="next-prayer-box">
       <div>
@@ -188,13 +197,7 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
     </div>
   </div>
 
-  <!-- Day navigation -->
-  <div class="day-nav">
-    <button class="nav-btn" onclick="changeDay(-1)">◀ اليوم السابق</button>
-    <button class="nav-btn today-indicator" id="todayBtn" onclick="goToday()">اليوم</button>
-    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ▶</button>
-  </div>
-
+  
   <div class="footer">Mekkawy</div>
 </div>
 
