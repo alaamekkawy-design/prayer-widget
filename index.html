@@ -31,7 +31,7 @@ body { display:flex; justify-content:center; }
 .loc-btn.active { background:#1a3a6b; color:white; }
 
 /* Day name */
-.day-name-ar { text-align:center; font-family:'Amiri',serif; font-size:9vw; font-weight:700; color:#1a3a6b; line-height:1; }
+.day-name-ar { text-align:center; font-family:'Amiri',serif; font-size:9vw; font-weight:700; color:#1a3a6b; line-height:1; margin-top:4vw; }
 .day-name-en {
   display:block; text-align:center; font-size:3vw; font-weight:600; color:#1a3a6b;
   letter-spacing:3px; border:1.5px solid #1a3a6b; padding:1vw 4vw;
@@ -142,7 +142,7 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
   <button class="settings-btn" onclick="openSettings()">⚙</button>
 
   <div class="location-bar" id="locationBar"></div>
-   <br>
+
   <div class="day-name-ar" id="dayAr">-</div>
   <span class="day-name-en" id="dayEn">-</span>
 
@@ -173,16 +173,14 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
     </tbody>
   </table>
 
-  
-
   <!-- Day navigation -->
   <div class="day-nav">
-    <button class="nav-btn" onclick="changeDay(-1)">▶ اليوم السابق</button>
+    <button class="nav-btn" onclick="changeDay(-1)">◀ اليوم السابق</button>
     <button class="nav-btn today-indicator" id="todayBtn" onclick="goToday()">اليوم</button>
-    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ◀</button>
+    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ▶</button>
   </div>
 
-<!-- Next prayer / countdown (today only) -->
+  <!-- Next prayer / countdown (today only) -->
   <div id="nextPrayerSection">
     <div class="next-prayer-box">
       <div>
@@ -197,7 +195,6 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
     </div>
   </div>
 
-  
   <div class="footer">Mekkawy</div>
 </div>
 
@@ -267,6 +264,7 @@ function saveToStorage() {
 }
 
 let settings    = loadSettings();
+try { localStorage.removeItem('mekkawy_cache'); } catch(e) {} // clear stale cache on update
 let currentCity = settings.cityIdx ?? 0;
 let dayOffset   = 0;   // 0 = today, -1 = yesterday, +1 = tomorrow …
 let prayerData  = null;
@@ -317,14 +315,25 @@ function toMins(apiTime, offsetMins) {
 
 // ════ API ════
 async function fetchAPI(lat, lng, madhab, date) {
-  const dd   = String(date.getDate()).padStart(2,'0');
-  const mm   = String(date.getMonth()+1).padStart(2,'0');
-  const yyyy = date.getFullYear();
-  const school = madhab==='hanafi'?1:0;
-  const url  = `https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${lat}&longitude=${lng}&method=5&school=${school}`;
-  const res  = await fetch(url);
-  if (!res.ok) throw new Error('API error');
-  return (await res.json()).data;
+  const dd     = String(date.getDate()).padStart(2,'0');
+  const mm     = String(date.getMonth()+1).padStart(2,'0');
+  const yyyy   = date.getFullYear();
+  const school = madhab === 'hanafi' ? 1 : 0;
+  // timezonestring=Africa/Cairo ensures times match Egypt's official timezone (UTC+2)
+  // without it, the API estimates timezone from longitude which can differ by ~5 min
+  const params = new URLSearchParams({
+    latitude:         lat,
+    longitude:        lng,
+    method:           5,
+    school:           school,
+    timezonestring:   'Africa/Cairo',
+  });
+  const url = `https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?${params}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('API error ' + res.status);
+  const json = await res.json();
+  if (json.code !== 200) throw new Error('API: ' + json.status);
+  return json.data;
 }
 
 function mkKey(lat, lng, madhab, date) {
