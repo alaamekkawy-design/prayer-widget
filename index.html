@@ -277,22 +277,22 @@ const CITIES = [
   {
     name:'القاهرة', lat:30.0444, lng:31.2357,
     landmark: 'أهرامات الجيزة',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Kheops-Pyramid.jpg/640px-Kheops-Pyramid.jpg'
+    img: 'images/cairo.jpg'
   },
   {
     name:'الإسكندرية', lat:31.2001, lng:29.9187,
     landmark: 'قلعة قايتباي',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Qaitbay_Citadel_%28Alexandria%2C_Egypt%29_2.jpg/640px-Qaitbay_Citadel_%28Alexandria%2C_Egypt%29_2.jpg'
+    img: 'images/alex.jpg'
   },
   {
     name:'المنصورة', lat:31.0364, lng:31.3807,
     landmark: 'نيل المنصورة',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Nile_at_Mansoura.jpg/640px-Nile_at_Mansoura.jpg'
+    img: 'images/mansoura.jpg'
   },
   {
     name:'أسوان', lat:24.0889, lng:32.8998,
     landmark: 'معبد أبو سمبل',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Temple_of_Ramesses_II%2C_Abu_Simbel%2C_Egypt.jpg/640px-Temple_of_Ramesses_II%2C_Abu_Simbel%2C_Egypt.jpg'
+    img: 'images/aswan.jpg'
   },
 ];
 const AR_DAYS     = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -591,49 +591,19 @@ function saveSettings() {
   prayerData=null; init();
 }
 
-// ════ Landmark Image Cache (Cache API) ════
-const IMG_CACHE_NAME = 'mekkawy-imgs-v1';
-
-// Preload & cache all city images on first open
-async function preloadAllImages() {
-  for (const city of CITIES) {
-    try {
-      if ('caches' in window) {
-        const cache = await caches.open(IMG_CACHE_NAME);
-        const hit   = await cache.match(city.img);
-        if (!hit) {
-          const res = await fetch(city.img, { mode: 'cors' });
-          if (res.ok) await cache.put(city.img, res);
-        }
-      } else {
-        // fallback: browser HTTP cache via Image()
-        new Image().src = city.img;
-      }
-    } catch(e) {}
-  }
+// ════ Landmark ════
+// Preload all images on first load so browser caches them
+function preloadAllImages() {
+  CITIES.forEach(c => { new Image().src = c.img; });
 }
 
-// Get image src — from Cache API blob URL if available, else original URL
-async function getCachedSrc(url) {
-  if ('caches' in window) {
-    try {
-      const cache = await caches.open(IMG_CACHE_NAME);
-      const match = await cache.match(url);
-      if (match) return URL.createObjectURL(await match.blob());
-    } catch(e) {}
-  }
-  return url;
-}
-
-async function renderLandmark() {
+function renderLandmark() {
   const city = CITIES[currentCity];
   const img  = document.getElementById('landmarkImg');
   const cap  = document.getElementById('landmarkCaption');
-  cap.textContent = '📍 ' + city.landmark;
-  img.alt = city.landmark;
-  // show original URL immediately (won't wait), replace with blob once ready
-  img.src = city.img;
-  getCachedSrc(city.img).then(src => { img.src = src; });
+  img.src          = city.img;
+  img.alt          = city.landmark;
+  cap.textContent  = '📍 ' + city.landmark;
 }
 
 // ════ Location Bar ════
