@@ -163,6 +163,120 @@ body { display:flex; justify-content:center; }
   margin-bottom: 1vw;
 }
 
+/* ══ Date Picker ══ */
+.datepicker-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.45); z-index:200;
+  align-items:center; justify-content:center;
+}
+.datepicker-overlay.open { display:flex; }
+
+.datepicker-panel {
+  background:#fff; width:88vw; max-width:360px;
+  border-radius:4vw; padding:4vw;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+  direction:rtl;
+}
+@media(min-width:560px){ .datepicker-panel{ border-radius:16px; padding:20px; } }
+
+/* ── Header row ── */
+.dp-header {
+  display:flex; align-items:center;
+  justify-content:space-between; margin-bottom:2.5vw; gap:1vw;
+}
+@media(min-width:560px){ .dp-header{ margin-bottom:12px; gap:4px; } }
+
+.dp-title-group {
+  display:flex; gap:1.5vw; align-items:center; flex:1; justify-content:center;
+}
+@media(min-width:560px){ .dp-title-group{ gap:6px; } }
+
+.dp-title-btn {
+  background:#f0f4fa; border:1px solid #c5cfe0;
+  border-radius:1.5vw; padding:.8vw 2vw;
+  font-family:'Cairo',sans-serif; font-size:3.2vw;
+  font-weight:700; color:#1a3a6b; cursor:pointer;
+  transition:all .15s;
+}
+.dp-title-btn:hover { background:#1a3a6b; color:white; }
+@media(min-width:560px){ .dp-title-btn{ border-radius:6px; padding:3px 10px; font-size:15px; } }
+
+.dp-nav {
+  background:none; border:1.5px solid #1a3a6b;
+  border-radius:50%; width:7vw; height:7vw; min-width:7vw;
+  color:#1a3a6b; font-size:3vw; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s;
+}
+.dp-nav:hover { background:#1a3a6b; color:white; }
+@media(min-width:560px){ .dp-nav{ width:30px; height:30px; min-width:30px; font-size:14px; } }
+
+/* ── Day view ── */
+.dp-weekdays {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  margin-bottom:1vw; text-align:center;
+}
+@media(min-width:560px){ .dp-weekdays{ margin-bottom:4px; } }
+
+.dp-weekday { font-size:2.4vw; font-weight:700; color:#a8c0e8; padding:.8vw 0; }
+@media(min-width:560px){ .dp-weekday{ font-size:11px; padding:3px 0; } }
+
+.dp-days { display:grid; grid-template-columns:repeat(7,1fr); gap:.5vw; }
+@media(min-width:560px){ .dp-days{ gap:2px; } }
+
+.dp-day {
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  font-size:2.8vw; border-radius:50%; cursor:pointer;
+  color:#1a3a6b; font-weight:600; transition:all .15s;
+}
+@media(min-width:560px){ .dp-day{ font-size:13px; } }
+.dp-day:hover    { background:#e8edf5; }
+.dp-day.today    { border:1.5px solid #1a3a6b; }
+.dp-day.selected { background:#1a3a6b; color:white; }
+.dp-day.empty    { cursor:default; }
+
+/* ── Month / Year grid view ── */
+.dp-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:2vw; padding:1vw 0;
+}
+@media(min-width:560px){ .dp-grid{ gap:8px; padding:4px 0; } }
+
+.dp-grid-item {
+  padding:2vw; text-align:center; border-radius:2vw;
+  font-size:3vw; font-weight:600; color:#1a3a6b;
+  cursor:pointer; border:1px solid transparent;
+  transition:all .15s;
+}
+@media(min-width:560px){ .dp-grid-item{ padding:8px; border-radius:8px; font-size:13px; } }
+.dp-grid-item:hover    { background:#e8edf5; }
+.dp-grid-item.selected { background:#1a3a6b; color:white; }
+.dp-grid-item.current  { border-color:#1a3a6b; }
+
+/* ── Footer buttons ── */
+.dp-footer {
+  display:flex; gap:2vw; margin-top:3vw;
+}
+@media(min-width:560px){ .dp-footer{ gap:8px; margin-top:12px; } }
+
+.dp-footer-btn {
+  flex:1; padding:2.5vw; border-radius:2vw;
+  font-family:'Cairo',sans-serif; font-size:2.8vw;
+  font-weight:700; cursor:pointer; border:1px solid #c5cfe0;
+  transition:all .15s;
+}
+@media(min-width:560px){ .dp-footer-btn{ padding:9px; border-radius:8px; font-size:13px; } }
+
+.dp-today-btn { background:#f0f4fa; color:#1a3a6b; }
+.dp-today-btn:hover { background:#e0e8f4; }
+
+.dp-save-btn  { background:#1a3a6b; color:white; border-color:#1a3a6b; }
+.dp-save-btn:hover { opacity:.85; }
+
+/* make date area clickable */
+.date-header-clickable { cursor:pointer; }
+.date-header-clickable:hover .day-name-ar { opacity:.8; }
+
 /* ══ Settings Overlay ══ */
 .settings-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; align-items:flex-start; justify-content:center; padding-top:5vw; }
 .settings-overlay.open { display:flex; }
@@ -201,7 +315,85 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
 .offset-btn { width:7vw; height:7vw; border-radius:50%; border:1.5px solid #1a3a6b; background:white; color:#1a3a6b; font-size:4vw; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 .offset-val { font-size:3.2vw; font-weight:700; color:#1a3a6b; min-width:8vw; text-align:center; }
 .save-btn { width:100%; padding:3vw; background:#1a3a6b; color:white; border:none; border-radius:2vw; font-family:'Cairo',sans-serif; font-size:3.5vw; font-weight:700; cursor:pointer; margin-top:2vw; }
+
+/* ══ Desktop ══ */
+@media (min-width: 560px) {
+  html, body { background: #f0f4fa; }
+
+  .widget {
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    border: 1px solid #e0e6f0;
+    padding: 16px;
+  }
+
+  .settings-btn   { width:36px; height:36px; font-size:18px; top:16px; left:16px; }
+
+  .location-bar   { gap:8px; margin-bottom:10px; }
+  .loc-btn        { font-size:13px; padding:4px 12px; }
+
+  .day-name-ar    { font-size:46px; margin-top:20px; }
+  .day-name-en    { font-size:14px; padding:4px 18px; margin:6px auto 10px; letter-spacing:3px; }
+
+  .date-num       { font-size:90px; }
+  .date-month-ar  { font-size:24px; }
+  .date-year      { font-size:22px; }
+  .date-block     { padding:4px 8px 0; }
+
+  .gregorian-line        { gap:8px; margin:8px 0 6px; font-size:13px; }
+  .gregorian-line .badge { font-size:12px; padding:2px 10px; }
+  .gregorian-line .coptic{ font-size:12px; padding:2px 10px; }
+
+  .prayer-table           { font-size:13px; margin-top:8px; }
+  .prayer-table th        { font-size:12px; }
+  .prayer-table th,
+  .prayer-table td        { padding:6px 3px; }
+
+  .next-prayer-box    { padding:12px 16px; margin-top:10px; border-radius:8px; }
+  .next-prayer-label  { font-size:12px; }
+  .next-prayer-name   { font-size:24px; }
+  .next-prayer-time   { font-size:14px; }
+  .countdown-label    { font-size:12px; }
+  .countdown-timer    { font-size:30px; }
+
+  .day-nav  { margin-top:12px; gap:8px; }
+  .nav-btn  { font-size:14px; padding:10px 0; border-radius:8px; }
+
+  .weather-box        { border-radius:12px; padding:14px; margin-top:10px; }
+  .weather-city-name  { font-size:13px; }
+  .weather-temp       { font-size:52px; }
+  .weather-unit       { font-size:20px; }
+  .weather-icon       { width:64px; height:64px; }
+  .weather-condition  { font-size:14px; }
+  .weather-detail-val { font-size:16px; }
+  .weather-detail-lbl { font-size:11px; }
+
+  .footer { font-size:16px; margin-top:12px; padding-top:10px; }
+
+  /* Settings panel */
+  .settings-panel  { border-radius:16px; padding:24px; }
+  .settings-title  { font-size:20px; }
+  .settings-label  { font-size:14px; }
+  .settings-section{ margin-bottom:20px; }
+  .madhab-btn      { font-size:13px; padding:8px; border-radius:8px; }
+  .madhab-row      { gap:8px; }
+  .offset-grid     { gap:8px; }
+  .offset-item     { border-radius:8px; padding:10px 14px; }
+  .offset-name     { font-size:13px; }
+  .offset-current  { font-size:11px; }
+  .offset-btn      { width:32px; height:32px; font-size:18px; }
+  .offset-val      { font-size:14px; }
+  .toggle          { width:52px; height:26px; }
+  .toggle-slider:before { width:20px; height:20px; }
+  input:checked + .toggle-slider:before { transform:translateX(26px); }
+  .preview-table th,
+  .preview-table td { font-size:12px; padding:6px 4px; }
+  .settings-preview-title { font-size:13px; }
+  .save-btn        { font-size:16px; padding:12px; border-radius:8px; }
+}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="widget">
@@ -209,8 +401,10 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
 
   <div class="location-bar" id="locationBar"></div>
 
-  <div class="day-name-ar" id="dayAr">-</div>
-  <span class="day-name-en" id="dayEn">-</span>
+  <div class="date-header-clickable" onclick="openDatePicker()" title="اختر تاريخاً">
+    <div class="day-name-ar" id="dayAr">-</div>
+    <span class="day-name-en" id="dayEn">-</span>
+  </div>
 
   <div class="dates-row">
     <div class="date-block">
@@ -241,9 +435,9 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
 
   <!-- Day navigation -->
   <div class="day-nav">
-    <button class="nav-btn" onclick="changeDay(-1)">◀ اليوم السابق</button>
+    <button class="nav-btn" onclick="changeDay(-1)">▶ اليوم السابق</button>
     <button class="nav-btn today-indicator" id="todayBtn" onclick="goToday()">اليوم</button>
-    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ▶</button>
+    <button class="nav-btn" onclick="changeDay(+1)">اليوم التالي ◀</button>
   </div>
 
   <!-- Next prayer / countdown (today only) -->
@@ -269,7 +463,90 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
   <div class="footer">Mekkawy</div>
 </div>
 
-<!-- Settings overlay -->
+<!-- Date Picker -->
+<div class="datepicker-overlay" id="dpOverlay">
+  <div class="datepicker-panel">
+
+    <!-- Header: year nav + month/year title buttons -->
+    <div class="dp-header">
+      <button class="dp-nav" id="dpPrevBtn" onclick="dpPrev()">▶▶</button>
+      <button class="dp-nav" onclick="dpPrevSingle()">▶</button>
+      <div class="dp-title-group">
+        <button class="dp-title-btn" id="dpMonthBtn" onclick="dpShowMonths()">-</button>
+        <button class="dp-title-btn" id="dpYearBtn"  onclick="dpShowYears()">-</button>
+      </div>
+      <button class="dp-nav" onclick="dpNextSingle()">◀</button>
+      <button class="dp-nav" id="dpNextBtn" onclick="dpNext()">◀◀</button>
+    </div>
+
+    <!-- Day view -->
+    <div id="dpDayView">
+      <div class="dp-weekdays">
+        <div class="dp-weekday">أح</div><div class="dp-weekday">إث</div>
+        <div class="dp-weekday">ثل</div><div class="dp-weekday">أر</div>
+        <div class="dp-weekday">خم</div><div class="dp-weekday">جم</div>
+        <div class="dp-weekday">سب</div>
+      </div>
+      <div class="dp-days" id="dpDays"></div>
+    </div>
+
+    <!-- Month / Year grid view -->
+    <div id="dpGridView" style="display:none">
+      <div class="dp-grid" id="dpGrid"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dp-footer">
+      <button class="dp-footer-btn dp-today-btn" onclick="dpSelectToday()">↩ اليوم</button>
+      <button class="dp-footer-btn dp-save-btn"  onclick="saveAsImage()">📸 حفظ كصورة</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Print View (for save as image) -->
+<div id="printView" style="display:none;position:fixed;top:-9999px;left:-9999px;width:420px;background:#fff;padding:24px 20px;direction:rtl;font-family:'Cairo',sans-serif;">
+
+  <div id="pv-dayAr"  style="text-align:center;font-family:'Amiri',serif;font-size:64px;font-weight:700;color:#1a3a6b;line-height:1;"></div>
+  <div id="pv-dayEn"  style="text-align:center;font-size:13px;font-weight:600;color:#1a3a6b;letter-spacing:3px;border:1.5px solid #1a3a6b;width:fit-content;padding:3px 20px;margin:5px auto 12px;"></div>
+
+  <div style="display:flex;border-top:2px solid #1a3a6b;border-bottom:2px solid #1a3a6b;margin-bottom:3px;">
+    <div style="flex:1;text-align:center;padding:4px 8px 2px;border-left:2px solid #1a3a6b;">
+      <span id="pv-hijriDay"   style="font-family:'Amiri',serif;font-size:100px;font-weight:700;color:#1a3a6b;line-height:.9;display:block;"></span>
+      <span id="pv-hijriMonth" style="font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#1a3a6b;display:block;line-height:1.2;"></span>
+      <span id="pv-hijriYear"  style="font-size:22px;font-weight:700;color:#1a3a6b;display:block;line-height:1.3;"></span>
+    </div>
+    <div style="flex:1;text-align:center;padding:4px 8px 2px;">
+      <span id="pv-gregDay"   style="font-family:'Amiri',serif;font-size:100px;font-weight:700;color:#1a3a6b;line-height:.9;display:block;"></span>
+      <span id="pv-gregMonth" style="font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#1a3a6b;display:block;line-height:1.2;"></span>
+      <span id="pv-gregYear"  style="font-size:22px;font-weight:700;color:#1a3a6b;display:block;line-height:1.3;"></span>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 8px;direction:ltr;">
+    <span id="pv-coptic" style="font-size:11px;color:#1a3a6b;border:1px solid #1a3a6b;padding:2px 8px;border-radius:10px;direction:rtl;"></span>
+    <span id="pv-greg"   style="background:#1a3a6b;color:white;font-size:11px;padding:2px 8px;border-radius:10px;"></span>
+  </div>
+
+  <table id="pv-table" style="width:100%;border-collapse:collapse;font-size:11.5px;direction:rtl;">
+    <thead>
+      <tr>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">المواقيت</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">فجر</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">شروق</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">ظهر</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">عصر</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">مغرب</th>
+        <th style="background:#f0f4fa;padding:5px 4px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;">عشاء</th>
+      </tr>
+    </thead>
+    <tbody id="pv-tbody"></tbody>
+  </table>
+
+  <div style="text-align:center;font-family:'Amiri',serif;font-size:18px;font-weight:700;color:#1a3a6b;margin-top:12px;padding-top:10px;border-top:1px solid #c5cfe0;">Mekkawy</div>
+</div>
+
+<!-- Settings overlay --><!-- Settings overlay -->
 <div class="settings-overlay" id="settingsOverlay">
   <div class="settings-panel">
     <div class="settings-title">⚙ إعدادات مواقيت الصلاة</div>
@@ -613,9 +890,207 @@ function saveSettings() {
   prayerData=null; init();
 }
 
+// ════ Date Picker ════
+const AR_MONTHS_FULL = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+let dpYear, dpMonth, dpView = 'days'; // views: 'days' | 'months' | 'years'
+let dpYearBase; // first year shown in years grid
+
+function openDatePicker() {
+  const v  = getViewDate();
+  dpYear   = v.getFullYear();
+  dpMonth  = v.getMonth();
+  dpView   = 'days';
+  dpYearBase = dpYear - 6;
+  renderDp();
+  document.getElementById('dpOverlay').classList.add('open');
+}
+
+function closeDatePicker() {
+  document.getElementById('dpOverlay').classList.remove('open');
+}
+
+// Navigation — behaviour depends on current view
+function dpPrev()       { if(dpView==='days') dpYear--;  else if(dpView==='months') dpYear--; else dpYearBase-=12; renderDp(); }
+function dpNext()       { if(dpView==='days') dpYear++;  else if(dpView==='months') dpYear++; else dpYearBase+=12; renderDp(); }
+function dpPrevSingle() { if(dpView==='days'){ dpMonth--; if(dpMonth<0){dpMonth=11;dpYear--;} } renderDp(); }
+function dpNextSingle() { if(dpView==='days'){ dpMonth++; if(dpMonth>11){dpMonth=0;dpYear++;} } renderDp(); }
+
+function dpShowMonths() { dpView='months'; renderDp(); }
+function dpShowYears()  { dpView='years';  dpYearBase=dpYear-6; renderDp(); }
+
+function renderDp() {
+  const dayView  = document.getElementById('dpDayView');
+  const gridView = document.getElementById('dpGridView');
+  const prevBtn  = document.getElementById('dpPrevBtn');
+  const nextBtn  = document.getElementById('dpNextBtn');
+
+  document.getElementById('dpMonthBtn').textContent = AR_MONTHS_FULL[dpMonth];
+  document.getElementById('dpYearBtn').textContent  = dpYear;
+
+  if (dpView === 'days') {
+    dayView.style.display  = '';
+    gridView.style.display = 'none';
+    prevBtn.textContent = '▶▶'; nextBtn.textContent = '◀◀';
+    renderDpDays();
+  } else {
+    dayView.style.display  = 'none';
+    gridView.style.display = '';
+    prevBtn.textContent = dpView==='years' ? '▶▶▶' : '▶▶';
+    nextBtn.textContent = dpView==='years' ? '◀◀◀' : '◀◀';
+    renderDpGrid();
+  }
+}
+
+function renderDpDays() {
+  const today    = new Date();
+  const viewDate = getViewDate();
+  const grid     = document.getElementById('dpDays');
+  grid.innerHTML = '';
+  const firstDay    = new Date(dpYear, dpMonth, 1).getDay();
+  const daysInMonth = new Date(dpYear, dpMonth+1, 0).getDate();
+
+  for (let i=0; i<firstDay; i++) {
+    const el=document.createElement('div'); el.className='dp-day empty'; grid.appendChild(el);
+  }
+  for (let d=1; d<=daysInMonth; d++) {
+    const el = document.createElement('div');
+    const isT = today.getFullYear()===dpYear && today.getMonth()===dpMonth && today.getDate()===d;
+    const isS = viewDate.getFullYear()===dpYear && viewDate.getMonth()===dpMonth && viewDate.getDate()===d;
+    el.className = 'dp-day' + (isT?' today':'') + (isS?' selected':'');
+    el.textContent = d;
+    el.onclick = () => dpSelectDate(dpYear, dpMonth, d);
+    grid.appendChild(el);
+  }
+}
+
+function renderDpGrid() {
+  const grid = document.getElementById('dpGrid');
+  grid.innerHTML = '';
+
+  if (dpView === 'months') {
+    AR_MONTHS_FULL.forEach((name, i) => {
+      const el = document.createElement('div');
+      el.className = 'dp-grid-item' + (i===dpMonth?' selected':'');
+      el.textContent = name;
+      el.onclick = () => { dpMonth=i; dpView='days'; renderDp(); };
+      grid.appendChild(el);
+    });
+  } else { // years
+    const curY = new Date().getFullYear();
+    for (let i=0; i<12; i++) {
+      const y  = dpYearBase + i;
+      const el = document.createElement('div');
+      el.className = 'dp-grid-item' + (y===dpYear?' selected':'') + (y===curY?' current':'');
+      el.textContent = y;
+      el.onclick = () => { dpYear=y; dpView='months'; renderDp(); };
+      grid.appendChild(el);
+    }
+  }
+}
+
+async function dpSelectDate(year, month, day) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sel   = new Date(year, month, day); sel.setHours(0,0,0,0);
+  dayOffset   = Math.round((sel - today) / 86400000);
+  closeDatePicker();
+  await loadAndRender();
+}
+
+function dpSelectToday() {
+  dayOffset = 0;
+  closeDatePicker();
+  loadAndRender();
+}
+
+// ════ Save as Image ════
+async function saveAsImage() {
+  closeDatePicker();
+  await new Promise(r => setTimeout(r, 300));
+
+  const date = getViewDate();
+  const pv   = document.getElementById('printView');
+
+  // Fill date info
+  const now = date;
+  document.getElementById('pv-dayAr').textContent  = AR_DAYS[now.getDay()];
+  document.getElementById('pv-dayEn').textContent  = EN_DAYS[now.getDay()];
+  document.getElementById('pv-gregDay').textContent   = toAr(now.getDate());
+  document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
+  document.getElementById('pv-gregYear').textContent  = toAr(now.getFullYear());
+  document.getElementById('pv-greg').textContent =
+    `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  const cop = toCoptic(now);
+  document.getElementById('pv-coptic').textContent =
+    toAr(cop.day)+' '+(COPTIC_MONTHS[cop.month]||'')+' '+toAr(cop.year);
+
+  // Hijri from loaded data or placeholder
+  if (prayerData && prayerData.date && prayerData.date.hijri) {
+    const h = prayerData.date.hijri;
+    document.getElementById('pv-hijriDay').textContent   = toAr(parseInt(h.day));
+    document.getElementById('pv-hijriMonth').textContent = h.month.ar;
+    document.getElementById('pv-hijriYear').textContent  = toAr(parseInt(h.year));
+  }
+
+  // Fetch all cities prayer times
+  const tbody = document.getElementById('pv-tbody');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:8px;color:#1a3a6b;font-size:11px;">جاري التحميل…</td></tr>';
+  pv.style.display = 'block';
+
+  try {
+    const rows = await Promise.all(CITIES.map(c => getPrayerData(c.lat, c.lng, settings.madhab, date)));
+    tbody.innerHTML = '';
+    rows.forEach((data, i) => {
+      const t   = data.timings;
+      const o   = settings.offsets;
+      const bg  = i % 2 === 1 ? '#f5f7fb' : '#fff';
+      tbody.innerHTML += `<tr style="background:${bg}">
+        <td style="padding:4px 5px;border:.5px solid #c5cfe0;color:#1a3a6b;font-weight:700;font-size:11px;">${CITIES[i].name}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Fajr,   o.fajr)}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Sunrise,o.sunrise)}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Dhuhr, o.dhuhr)}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Asr,   o.asr)}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Maghrib,o.maghrib)}</td>
+        <td style="padding:4px 2px;border:.5px solid #c5cfe0;color:#1a3a6b;text-align:center;font-size:11px;">${fmtTime(t.Isha,  o.isha)}</td>
+      </tr>`;
+    });
+
+    const canvas = await html2canvas(pv, { scale:3, useCORS:true, backgroundColor:'#ffffff' });
+    const link   = document.createElement('a');
+    link.download = `مواقيت_${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}.png`;
+    link.href     = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) {
+    alert('تعذر حفظ الصورة: ' + e.message);
+  } finally {
+    pv.style.display = 'none';
+  }
+}
+
+// Close on backdrop click
+document.getElementById('dpOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeDatePicker();
+});
+
 // ════ Weather (WeatherAPI.com) ════
 const WEATHER_KEY   = '819c643e98f045faadd50730260106';
 const WEATHER_CACHE = 'mekkawy_weather';
+
+// Clear prayer + weather cache for a specific city (current date)
+function clearCityCache(city) {
+  try {
+    // Clear prayer cache
+    const pc    = JSON.parse(localStorage.getItem('mekkawy_cache') || '{}');
+    const today = new Date();
+    const sfx   = `${city.lat.toFixed(2)}_${city.lng.toFixed(2)}`;
+    Object.keys(pc).forEach(k => { if (k.startsWith(sfx)) delete pc[k]; });
+    localStorage.setItem('mekkawy_cache', JSON.stringify(pc));
+    // Clear weather cache
+    const wc = JSON.parse(localStorage.getItem(WEATHER_CACHE) || '{}');
+    const wsfx = `${city.lat.toFixed(2)}_${city.lng.toFixed(2)}`;
+    Object.keys(wc).forEach(k => { if (k.startsWith(wsfx)) delete wc[k]; });
+    localStorage.setItem(WEATHER_CACHE, JSON.stringify(wc));
+  } catch(e) {}
+}
 
 async function fetchWeather(lat, lng) {
   const url = `https://api.weatherapi.com/v1/current.json?key=${WEATHER_KEY}&q=${lat},${lng}&lang=ar&aqi=no`;
@@ -631,7 +1106,7 @@ function mkWeatherKey(lat, lng) {
   return `${lat.toFixed(2)}_${lng.toFixed(2)}_${d.getDate()}_${d.getHours()}_${slot}`;
 }
 
-async function loadWeather() {
+async function loadWeather(forceRefresh=false) {
   const city = CITIES[currentCity];
   const key  = mkWeatherKey(city.lat, city.lng);
   const box  = document.getElementById('weatherBox');
@@ -639,7 +1114,7 @@ async function loadWeather() {
   // Check localStorage cache
   try {
     const cached = JSON.parse(localStorage.getItem(WEATHER_CACHE) || '{}');
-    if (cached[key]) { renderWeather(cached[key], city.name); return; }
+    if (!forceRefresh && cached[key]) { renderWeather(cached[key], city.name); return; }
   } catch(e) {}
 
   box.innerHTML = '<div class="weather-loading">جاري تحميل الطقس…</div>';
@@ -709,10 +1184,12 @@ function buildLocationBar() {
       document.querySelectorAll('.loc-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       currentCity=i; settings.cityIdx=i; saveToStorage();
+      // Force refresh: clear cache for this city
+      clearCityCache(CITIES[i]);
       prayerData=null;
       document.getElementById('prayerBody').innerHTML='<tr><td colspan="6" class="loading">جاري التحميل…</td></tr>';
       await loadAndRender();
-      loadWeather();
+      loadWeather(true); // force refresh weather too
     };
     bar.appendChild(btn);
   });
