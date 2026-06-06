@@ -1500,12 +1500,16 @@ function showAboutPopup() {
 
   const email = document.createElement('div');
   email.textContent = 'alaamekkawy@gmail.com';
-  email.style.cssText = 'font-family:Cairo,sans-serif;font-size:13px;color:#4a6a9b;margin-bottom:24px;';
+  email.style.cssText = 'font-family:Cairo,sans-serif;font-size:13px;color:#4a6a9b;margin-bottom:6px;';
 
   const mobile = document.createElement('div');
-  mobile.textContent = '01200376068 / 01003411188';
-  mobile.style.cssText = 'font-family:Cairo,sans-serif;font-size:13px;color:#4a6a9b;margin-bottom:6px;';
+  mobile.textContent = '01200376068/01003411188';
+  mobile.style.cssText = 'font-family:Cairo,sans-serif;font-size:10px;color:#4a6a9b;margin-bottom:10px;';
 
+  const mobile = document.createElement('div');
+  noted.textContent = 'لنسخ ورقة النتيجة كصورة إضغط علي اسم اليوم وإختار التاريخ المراد ثم إضغط علي اسم اليوم ثم إضغط علي زر الحفظ كصورة ثم إختار بعد ذلك اذا كنت تريد تضمين بيانت البرج ام لا.';
+  noted.style.cssText = 'font-family:Cairo,sans-serif;rows:"3";wrap:"soft";font-size:10px;color:#4a6a9b;margin-bottom:24px;';
+  
   const btn = document.createElement('button');
   btn.textContent = 'إغلاق';
   btn.style.cssText = 'padding:10px 32px;background:#1a3a6b;color:white;border:none;border-radius:8px;font-family:Cairo,sans-serif;font-size:14px;font-weight:700;cursor:pointer;';
@@ -1514,7 +1518,8 @@ function showAboutPopup() {
   box.appendChild(img);
   box.appendChild(name);
   box.appendChild(email);
-  box.appendChild(mobile)
+  box.appendChild(mobile);
+  box.appendChild(noted);
   box.appendChild(btn);
   overlay.appendChild(box);
 
