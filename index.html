@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; height:auto; overflow-x:hidden; background:#fff; font-family:'Cairo',sans-serif; }
+html, body { width:100%; height:auto; overflow-x:hidden; background:#fff; font-family:'Cairo',sans-serif; overscroll-behavior-y:contain;  }
 body { display:flex; justify-content:center; }
 
 .widget { width:100vw; padding:3vw; background:#fff; position:relative; }
@@ -1548,6 +1548,33 @@ function showAboutPopup() {
   });
   document.body.appendChild(overlay);
 }
+//rEFRISH
+  let touchStartTextY = 0;
+
+// 1. التقاط نقطة بداية لمس الشاشة من الأعلى
+window.addEventListener('touchstart', function(e) {
+    if (window.scrollY === 0) {
+        touchStartTextY = e.touches[0].clientY;
+    }
+}, { passive: true });
+
+// 2. التحقق من مسافة السحب لأسفل لتنفيذ أمر التحديث
+window.addEventListener('touchmove', function(e) {
+    const touchMoveTextY = e.touches[0].clientY;
+    const swipeDistance = touchMoveTextY - touchStartTextY;
+
+    // إذا سحب المستخدم لأسفل مسافة أكثر من 150 بكسل وهو في قمة الصفحة
+    if (window.scrollY === 0 && swipeDistance > 150) {
+        // يمكنك استدعاء دالة تحديث البيانات الخاصة بك هنا، أو إعادة تحميل الصفحة كاملة:
+        try {
+            // إخلاء أي كاش مؤقت إذا أردت قبل الريفرش
+            localStorage.removeItem('mekkawy_cache'); 
+        } catch(err) {}
+        
+        // إعادة تحميل الصفحة فوراً
+        window.location.reload();
+    }
+}, { passive: true });
 
 // ════ Timers ════
 init();
