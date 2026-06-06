@@ -997,11 +997,11 @@ function requestNotificationPermission() {
 
 // 2. التحقق من صلاحيات المتصفح وإرسال التنبيه
 if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("مواقيت الصلاة", {
-        body: "حان الآن موعد الصلاة",
+  //  new Notification("مواقيت الصلاة", {
+    //    body: "حان الآن موعد الصلاة",
        // icon: prayerNotificationIcon, // 👈 تم استدعاء المتغير هنا بنجاح وبشكل آمن
-        vibrate: [200, 100, 200]       // تفعيل ميزة الهزاز للهواتف الذكية المدعومة
-    });
+      //  vibrate: [200, 100, 200]       // تفعيل ميزة الهزاز للهواتف الذكية المدعومة
+   // });
 }
   initAudio(); if(!audioCtx)return;
   [[523.25,0],[659.25,.45],[783.99,.9],[659.25,1.35],[523.25,1.8]].forEach(([freq,delay])=>{
