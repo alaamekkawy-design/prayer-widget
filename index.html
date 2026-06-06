@@ -1508,7 +1508,8 @@ function showAboutPopup() {
 
   const mobile = document.createElement('div');
   mobile.textContent = '01200376068/01003411188';
-  mobile.style.cssText = 'font-family:Cairo,sans-serif;font-size:10px;color:#4a6a9b;margin-bottom:24px;';
+  mobile.style.cssText = 'font-family:Cairo,sans-serif;font-size:8px;color:#4a6a9b;margin-bottom:24px;';
+  
   const btn = document.createElement('button');
   btn.textContent = 'إغلاق';
   btn.style.cssText = 'padding:10px 32px;background:#1a3a6b;color:white;border:none;border-radius:8px;font-family:Cairo,sans-serif;font-size:14px;font-weight:700;cursor:pointer;';
@@ -1516,9 +1517,10 @@ function showAboutPopup() {
 
   box.appendChild(img);
   box.appendChild(name);
+  box.appendChild(noted);
   box.appendChild(email);
   box.appendChild(mobile);
-  box.appendChild(noted);
+  
   box.appendChild(btn);
   overlay.appendChild(box);
 
