@@ -999,7 +999,7 @@ function requestNotificationPermission() {
     if ("Notification" in window && Notification.permission === "granted") {
         new Notification("مواقيت الصلاة", {
             body: "حان الآن موعد الصلاة",
-            icon: prayerNotificationIcon;
+         //   icon: prayerNotificationIcon;
             vibrate: [200, 100, 200] // تفعيل ميزة الهزاز في الهواتف الذكية
         });
     }
