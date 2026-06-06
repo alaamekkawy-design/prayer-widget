@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>استخراج وعكس شفرة الصورة (Data URL / Base64)</title>
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #333;
+      --primary: #2ecc71;
+      --secondary: #3498db;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto;
+      background: var(--bg);
+      color: var(--text);
+      direction: rtl;
+    }
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: right;
+    }
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+    figure {
+      text-align: center;
+      margin: 20px 0;
+    }
+    img.preview {
+      max-width: 100%;
+      max-height: 300px;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    .code-area {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+      direction: ltr;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 250px;
+      width: 100%;
+      min-height: 100px;
+      border: 2px solid #333;
+      font-family: monospace;
+      resize: vertical;
+    }
+    .code-area:focus {
+      border-color: var(--secondary);
+      outline: none;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    button:hover { opacity: 0.95; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-secondary {
+      background: var(--secondary);
+    }
+    .muted { color: #666; font-size: 0.95em; }
+    label.upload-btn {
+      cursor: pointer;
+      padding: 12px 20px;
+      background: #34495e;
+      color: #fff;
+      border-radius: 6px;
+      font-weight: bold;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 style="margin:0; font-size:1.25rem;">أداة استخراج وعكس شفرة الصورة (Data URL)</h1>
+  </header>
+
+  <main>
+    <section class="card" aria-label="عرض ومعاينة الصورة">
+      <h2 style="text-align: right; margin-top:0;">الوضع العادي: اختر صورة لاستخراج الشفرة</h2>
+      <p>اختر صورة من جهازك ليتم تحويلها مباشرة إلى شفرة Base64 في الصندوق بالأسفل.</p>
+
+      <div class="row section" aria-label="رفع الصورة ومعاينتها">
+        <div>
+          <label for="fileInput" class="upload-btn">
+            اختر صورة من جهازك
+          </label>
+          <input id="fileInput" type="file" accept="image/*" style="display:none" />
+        </div>
+        <div class="muted" id="hint">
+          أو يمكنك استخدام الوضع العكسي بالصق مباشرة في صندوق الكود بالأسفل لعرض الصورة هنا.
+        </div>
+      </div>
+
+      <figure>
+        <img id="imagePreview" class="preview" src="" alt="معاينة الصورة ستظهر هنا" style="display:none;" />
+        <figcaption class="muted" id="caption" style="display:none; margin-top: 8px;">معاينة الصورة الحالية</figcaption>
+      </figure>
+    </section>
+
+    <section class="card" aria-label="الشفرة المستخرجة والمعكوسة">
+      <h2 style="text-align: right; margin-top:0;">الوضع العكسي: ضع شفرة الصورة (Data URL) هنا</h2>
+      <p class="muted">يمكنك نسخ الشفرة من هنا، أو <strong>لصق شفرة جديدة</strong> لعكسها واسترداد الصورة فوراً:</p>
+      
+      <textarea id="codeBlock" class="code-area" placeholder="ضع شفرة الـ Base64 أو الـ Data URL هنا لعكسها وعرض الصورة..."></textarea>
+      
+      <div class="section row">
+        <button id="copyBtn" disabled>نسخ الشفرة</button>
+        <button id="downloadBtn" class="btn-secondary" style="display: none;">تحميل الصورة المسترجعة</button>
+        <button id="clearBtn" class="upload-btn" style="background: #e74c3c;">مسح الكل</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const caption = document.getElementById('caption');
+    const codeBlock = document.getElementById('codeBlock');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // متغير عالمي لحفظ الرابط النظيف الصالح للتحميل دائماً
+    let validDataUrlForDownload = "";
+
+    function updatePreview(dataUrl) {
+      imagePreview.src = dataUrl;
+      imagePreview.style.display = 'inline-block';
+      caption.style.display = 'block';
+      copyBtn.disabled = false;
+      
+      // حفظ الرابط النظيف وتفعيل زر التحميل فوراً
+      validDataUrlForDownload = dataUrl;
+      downloadBtn.style.display = 'inline-block';
+    }
+
+    // 1. الوضع الطبيعي
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        codeBlock.value = dataUrl;
+        updatePreview(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 2. الوضع العكسي المطور والمعالج للأخطاء
+    codeBlock.addEventListener('input', () => {
+      let value = codeBlock.value.trim();
+      
+      if (value === '') {
+        resetUI();
+        return;
+      }
+
+      // إزالة أي مسافات أو أسطر جديدة قد تفسد الكود أثناء اللصق
+      value = value.replace(/\s/g, '');
+
+      if (value.startsWith('data:image/')) {
+        updatePreview(value);
+      } else {
+        // إذا كانت الشفرة مجردة (Base64 صامت)، نقوم ببناء الديباجة تلقائياً لضمان استجابة التحميل
+        if (/^[A-Za-z0-9+/=]+$/.test(value)) {
+          const guessedDataUrl = `data:image/png;base64,${value}`;
+          updatePreview(guessedDataUrl);
+        } else {
+          // نص غير صالح
+          imagePreview.style.display = 'none';
+          caption.style.display = 'none';
+          downloadBtn.style.display = 'none';
+          copyBtn.disabled = true;
+          validDataUrlForDownload = "";
+        }
+      }
+    });
+
+    // زر النسخ
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codeBlock.value);
+        copyBtn.textContent = 'تم نسخ الشفرة بنجاح!';
+        copyBtn.style.background = '#27ae60';
+        setTimeout(() => { 
+          copyBtn.textContent = 'نسخ الشفرة'; 
+          copyBtn.style.background = 'var(--primary)';
+        }, 2000);
+      } catch (e) {
+        alert('يرجى تحديد النص ونسخه يدوياً.');
+      }
+    });
+
+    // زر التحميل المضمون والآمن
+    downloadBtn.addEventListener('click', () => {
+      if (!validDataUrlForDownload || !validDataUrlForDownload.startsWith('data:image/')) {
+        alert('الشفرة الحالية غير صالحة للتحميل كملف صورة.');
+        return;
+      }
+      
+      try {
+        // تحديد الامتداد بدقة
+        const extension = validDataUrlForDownload.split(';')[0].split('/')[1] || 'png';
+        
+        const link = document.createElement('a');
+        link.href = validDataUrlForDownload;
+        link.download = `image_file.${extension}`;
+        
+        // إجبار المتصفح على بدء التحميل الفوري
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        alert('تعذر التحميل التلقائي، قد تكون الشفرة تالفة أو ناقصة.');
+      }
+    });
+
+    // زر المسح
+    clearBtn.addEventListener('click', () => {
+      resetUI();
+    });
+
+    function resetUI() {
+      fileInput.value = '';
+      codeBlock.value = '';
+      imagePreview.src = '';
+      imagePreview.style.display = 'none';
+      caption.style.display = 'none';
+      copyBtn.disabled = true;
+      downloadBtn.style.display = 'none';
+      validDataUrlForDownload = "";
+    }
+  </script>
+
+</body>
+</html>
