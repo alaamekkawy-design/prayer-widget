@@ -987,8 +987,22 @@ function initAudio() {
 }
   // التعديل المدمج: إجبار نظام أندرويد على تفعيل الصوت إذا كان في وضع السكون (suspended)
   if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+  // دالة لطلب إذن الإشعارات من نظام أندرويد (تُستدعى عند تشغيل التطبيق أول مرة)
+function requestNotificationPermission() {
+    if ("Notification" in window) {
+        Notification.requestPermission();
+    }
+}
 function playAlert() {
   if (!settings.audio) return;
+  // === إضافة الإشعار الشاشي لأندرويد ===
+    if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("مواقيت الصلاة", {
+            body: "حان الآن موعد الصلاة",
+            icon: "icon.png", // يمكنك وضع مسار أيقونة تطبيقك هنا (اختياري)
+            vibrate: [200, 100, 200] // تفعيل ميزة الهزاز في الهواتف الذكية
+        });
+    }
   initAudio(); if(!audioCtx)return;
   [[523.25,0],[659.25,.45],[783.99,.9],[659.25,1.35],[523.25,1.8]].forEach(([freq,delay])=>{
     try {
