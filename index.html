@@ -986,7 +986,7 @@ function initAudio() {
   if (!audioCtx) { try { audioCtx=new(window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
 }
   // التعديل المدمج: إجبار نظام أندرويد على تفعيل الصوت إذا كان في وضع السكون (suspended)
-    if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+   // if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
 function playAlert() {
   if (!settings.audio) return;
   initAudio(); if(!audioCtx)return;
