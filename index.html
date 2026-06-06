@@ -1511,19 +1511,19 @@ function showAboutPopup() {
 
   const img = document.createElement('img');
   img.src   = LOGO_SRC;
-  img.style.cssText = 'width:100px;height:100px;object-fit:contain;display:block;margin:0 auto 16px;';
-
+  img.style.cssText = 'width:100px;height:100px;object-fit:contain;display:block;margin:0 auto 16px;'; 
+ 
+  const noted = document.createElement('div');
+  noted.textContent = 'لعمــل صـورة من ورقــة النتيجة لحفظها إضغط علـي اســم اليــوم وإختـــار التــاريخ المراد ثــم إضغط علي اســم اليــوم ثــم إضغط علي زر الحفـظ كصـورة ثــم تـابـــع, أسـألـــكم الدعــــــــــاء';
+  noted.style.cssText = 'font-family:Cairo,sans-serif;rows:"3";wrap:"soft";text-align:"right";;font-size:10px;color:#000000;margin-bottom:24px;';
+  
   const name = document.createElement('div');
   name.textContent = 'Alaa Mekkawy';
   name.style.cssText = 'font-family:Cairo,sans-serif;font-size:20px;font-weight:900;color:#1a3a6b;margin-bottom:6px;';
-
-  const noted = document.createElement('div');
-  noted.textContent = 'لعمــل صـورة من ورقــة النتيجة لحفظها إضغط علـي اســم اليــوم وإختـــار التــاريخ المراد ثــم إضغط علي اســم اليــوم ثــم إضغط علي زر الحفـظ كصـورة ثــم تـابـــع';
-  noted.style.cssText = 'font-family:Cairo,sans-serif;rows:"3";wrap:"soft";text-align:"right";;font-size:10px;color:#000000;margin-bottom:6px;';
   
   const email = document.createElement('div');
   email.textContent = 'alaamekkawy@gmail.com';
-  email.style.cssText = 'font-family:Cairo,sans-serif;font-size:13px;color:#4a6a9b;';
+  email.style.cssText = 'font-family:Cairo,sans-serif;font-size:6px;color:#4a6a9b;margin-bottom:0px;';
 
   const mobile = document.createElement('div');
   mobile.textContent = '01200376068 / 01003411188';
@@ -1535,8 +1535,9 @@ function showAboutPopup() {
   btn.onclick = function() { document.body.removeChild(overlay); };
 
   box.appendChild(img);
+   box.appendChild(noted);
   box.appendChild(name);
-  box.appendChild(noted);
+ 
   box.appendChild(email);
   box.appendChild(mobile);  
   box.appendChild(btn);
