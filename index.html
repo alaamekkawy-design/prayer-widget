@@ -1623,6 +1623,16 @@ setInterval(()=>{
   const n=new Date();
   if(n.getHours()===0&&n.getMinutes()===0&&n.getSeconds()<5){ prayerData=null; loadAndRender(); }
 },5000);
+
+// ════ Service Worker Registration ════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+
 </script>
 
 </body>
