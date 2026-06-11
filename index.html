@@ -611,14 +611,14 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
   </div>
 
   <!-- Next prayer / countdown (today only) -->
-  <div id="nextPrayerSection">
+  <div id="nextPrayerSection" onclick="location.reload();" style="cursor: pointer;">
     <div class="next-prayer-box">
       <div>
         <div class="next-prayer-label">الصلاة القادمة</div>
         <div class="next-prayer-name" id="nextPrayerName">-</div>
         <div class="next-prayer-time" id="nextPrayerTime">-</div>
       </div>
-      <div class="countdown-box" onclick="location.reload();" style="cursor: pointer;">		  
+      <div class="countdown-box" >		  
         <div class="countdown-label">الوقت المتبقي</div>
         <div class="countdown-timer" id="countdownTimer">--:--:--</div>		 
       </div>
