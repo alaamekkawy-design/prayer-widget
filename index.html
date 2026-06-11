@@ -1322,7 +1322,7 @@ async function saveAsImage(withZodiac=true) {
   document.getElementById('pv-dayEn').textContent  = EN_DAYS[now.getDay()];
   document.getElementById('pv-gregDay').textContent   = toAr(now.getDate());
  // document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
-  document.getElementById('gregMonth').innerHTML =
+  document.getElementById('pv-gregMonth').innerHTML =
   AR_MONTHS_G[date.getMonth()] +
   ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
   document.getElementById('pv-gregYear').textContent  = toAr(now.getFullYear());
