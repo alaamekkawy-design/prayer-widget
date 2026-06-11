@@ -963,7 +963,7 @@ function renderDates(data, date) {
   }
 
   document.getElementById('gregLineFull').textContent =
-    `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+    `${now.getDate()} ${EN_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
   const cop = toCoptic(date);
   document.getElementById('copticSpan').textContent =
     toAr(cop.day)+' '+(COPTIC_MONTHS[cop.month]||'')+' '+toAr(cop.year);
