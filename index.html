@@ -796,6 +796,7 @@ const AR_DAYS     = ['الأحد','الاثنين','الثلاثاء','الأر�
 const EN_DAYS     = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
 const AR_MONTHS_G = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 const EN_MONTHS   = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+const SYRIAC_MONTHS = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
 const COPTIC_MONTHS = ['توت','بابه','هاتور','كيهك','طوبه','أمشير','برمهات','برموده','بشنس','بؤونه','أبيب','مسرى','النسيء'];
 const PRAYER_KEYS   = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
 const PRAYER_LABELS = {fajr:'الفجر',sunrise:'الشروق',dhuhr:'الظهر',asr:'العصر',maghrib:'المغرب',isha:'العشاء'};
@@ -945,7 +946,10 @@ function renderDates(data, date) {
   document.getElementById('dayAr').textContent  = AR_DAYS[date.getDay()];
   document.getElementById('dayEn').textContent  = EN_DAYS[date.getDay()];
   document.getElementById('gregDay').textContent   = toAr(date.getDate());
-  document.getElementById('gregMonth').textContent = AR_MONTHS_G[date.getMonth()];
+  //document.getElementById('gregMonth').textContent = AR_MONTHS_G[date.getMonth()];
+  document.getElementById('gregMonth').innerHTML =
+  AR_MONTHS_G[date.getMonth()] +
+  `<br><span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
   document.getElementById('gregYear').textContent  = toAr(date.getFullYear());
   document.getElementById('gregLineFull').textContent =
     `${date.getDate()} ${EN_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
@@ -1318,7 +1322,10 @@ async function saveAsImage(withZodiac=true) {
   document.getElementById('pv-dayAr').textContent  = AR_DAYS[now.getDay()];
   document.getElementById('pv-dayEn').textContent  = EN_DAYS[now.getDay()];
   document.getElementById('pv-gregDay').textContent   = toAr(now.getDate());
-  document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
+ // document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
+  document.getElementById('pv-gregMonth').innerHTML =
+  AR_MONTHS_G[now.getMonth()] +
+  `<br><span style="font-size:.5em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[now.getMonth()]})</span>`;	
   document.getElementById('pv-gregYear').textContent  = toAr(now.getFullYear());
   document.getElementById('pv-greg').textContent =
     `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
