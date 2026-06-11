@@ -52,9 +52,9 @@ body { display:flex; justify-content:center; }
 .date-year { font-size:4.5vw; font-weight:700; color:#1a3a6b; display:block; line-height:1.3; }
 
 /* Greg/Coptic line */
-.gregorian-line { display:flex; align-items:center; justify-content:center; gap:10vw; margin:1.5vw 0 1vw; direction:ltr; }
-.gregorian-line .badge { font-size:2.6vw; color:white; border-radius:10px; padding:.5vw 5vw; background:#1a3a6b; }
-.gregorian-line .coptic { font-size:2.6vw; color:#1a3a6b; border:1px solid #1a3a6b; padding:.5vw 5vw; border-radius:10px; direction:rtl; }
+.gregorian-line { display:flex; align-items:center; justify-content:center; gap:8vw; margin:1.5vw 0 1vw; direction:ltr; }
+.gregorian-line .badge { font-size:2.6vw; color:white; border-radius:10px; padding:.5vw 2vw; background:#1a3a6b; }
+.gregorian-line .coptic { font-size:2.6vw; color:#1a3a6b; border:1px solid #1a3a6b; padding:.5vw 2vw; border-radius:10px; direction:rtl; }
 
 /* Prayer table */
 .prayer-table { width:100%; border-collapse:collapse; margin-top:1.5vw; font-size:2.8vw; direction:rtl; table-layout:fixed; }
@@ -946,10 +946,12 @@ function renderDates(data, date) {
   document.getElementById('dayAr').textContent  = AR_DAYS[date.getDay()];
   document.getElementById('dayEn').textContent  = EN_DAYS[date.getDay()];
   document.getElementById('gregDay').textContent   = toAr(date.getDate());
-  //document.getElementById('gregMonth').textContent = AR_MONTHS_G[date.getMonth()];
-    
-	document.getElementById('gregMonth').innerHTML = AR_MONTHS_G[date.getMonth()] + ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
+  //document.getElementById('gregMonth').textContent = AR_MONTHS_G[date.getMonth()];    
+  document.getElementById('gregMonth').innerHTML =
+  AR_MONTHS_G[date.getMonth()] +
+  ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
 	document.getElementById('gregYear').textContent  = toAr(date.getFullYear());
+
   if (data && data.date && data.date.hijri) {
     const h = data.date.hijri;
     document.getElementById('hijriDay').textContent   = toAr(parseInt(h.day));
@@ -959,9 +961,12 @@ function renderDates(data, date) {
     ['hijriDay','hijriMonth','hijriYear'].forEach(id =>
       document.getElementById(id).textContent = '--');
   }
-  document.getElementById('greg').textContent = `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+
+  document.getElementById('greg').textContent =
+    `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const cop = toCoptic(date);
-  document.getElementById('copticSpan').textContent = toAr(cop.day)+' '+(COPTIC_MONTHS[cop.month]||'')+' '+toAr(cop.year);
+  document.getElementById('copticSpan').textContent =
+    toAr(cop.day)+' '+(COPTIC_MONTHS[cop.month]||'')+' '+toAr(cop.year);
 
   // Show/hide countdown (only for today)
   document.getElementById('nextPrayerSection').style.display = isToday() ? 'block' : 'none';
@@ -1319,9 +1324,11 @@ async function saveAsImage(withZodiac=true) {
   document.getElementById('pv-gregDay').textContent   = toAr(now.getDate());
  // document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
   document.getElementById('pv-gregMonth').innerHTML =
-  AR_MONTHS_G[date.getMonth()] +` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
+  AR_MONTHS_G[date.getMonth()] +
+  ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
   document.getElementById('pv-gregYear').textContent  = toAr(now.getFullYear());
-  document.getElementById('pv-greg').textContent = `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('pv-greg').textContent =
+    `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const cop = toCoptic(now);
   document.getElementById('pv-coptic').textContent =
     toAr(cop.day)+' '+(COPTIC_MONTHS[cop.month]||'')+' '+toAr(cop.year);
