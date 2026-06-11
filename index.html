@@ -576,7 +576,7 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
     <span class="day-name-en" id="dayEn">-</span>
   </div>
 
-  <div class="dates-row">
+  <div class="dates-row" onclick="openDatePicker()" title="اختر تاريخاً">
     <div class="date-block">
       <span class="date-num"      id="gregDay">-</span>
       <span class="date-month-ar" id="gregMonth">-</span>
@@ -631,7 +631,7 @@ input:checked + .toggle-slider:before { transform:translateX(6vw); }
   </div>
 
   <div class="footer">
-    <span style="vertical-align:middle;">Mekkawy</span>
+    <span onclick="location.reload();" style="vertical-align:middle;cursor: pointer;">Mekkawy</span>
     <img id="logoFooter" src="." style="height:4vw;width:4vw;object-fit:contain;vertical-align:middle;margin-right:1.5vw;cursor:pointer;" alt="logo" onclick="showAboutPopup()">
   </div>
 </div>
