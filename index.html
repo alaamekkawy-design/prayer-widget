@@ -947,12 +947,11 @@ function renderDates(data, date) {
   document.getElementById('dayEn').textContent  = EN_DAYS[date.getDay()];
   document.getElementById('gregDay').textContent   = toAr(date.getDate());
   //document.getElementById('gregMonth').textContent = AR_MONTHS_G[date.getMonth()];
-  document.getElementById('gregMonth').innerHTML =
+    
+	document.getElementById('gregMonth').innerHTML =
   AR_MONTHS_G[date.getMonth()] +
-  ' <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
-  document.getElementById('gregYear').textContent  = toAr(date.getFullYear());
-  document.getElementById('gregLineFull').textContent =
-    `${date.getDate()} ${EN_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+  ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
+	document.getElementById('gregYear').textContent  = toAr(date.getFullYear());
 
   if (data && data.date && data.date.hijri) {
     const h = data.date.hijri;
@@ -1323,9 +1322,9 @@ async function saveAsImage(withZodiac=true) {
   document.getElementById('pv-dayEn').textContent  = EN_DAYS[now.getDay()];
   document.getElementById('pv-gregDay').textContent   = toAr(now.getDate());
  // document.getElementById('pv-gregMonth').textContent = AR_MONTHS_G[now.getMonth()];
-  document.getElementById('pv-gregMonth').innerHTML =
-  AR_MONTHS_G[now.getMonth()] +
-  ` <span style="font-size:.5em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[now.getMonth()]})</span>`;	
+  document.getElementById('gregMonth').innerHTML =
+  AR_MONTHS_G[date.getMonth()] +
+  ` <span style="font-size:.55em;font-weight:600;opacity:.75;">(${SYRIAC_MONTHS[date.getMonth()]})</span>`;
   document.getElementById('pv-gregYear').textContent  = toAr(now.getFullYear());
   document.getElementById('pv-greg').textContent =
     `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
