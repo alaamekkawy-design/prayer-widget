@@ -962,7 +962,7 @@ function renderDates(data, date) {
       document.getElementById(id).textContent = '--');
   }
 
-  document.getElementById('greg').textContent =
+  document.getElementById('gregLineFull').textContent =
     `${now.getDate()} ${EN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const cop = toCoptic(date);
   document.getElementById('copticSpan').textContent =
